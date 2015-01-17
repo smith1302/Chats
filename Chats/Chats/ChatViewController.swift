@@ -283,7 +283,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let numberOfRows = tableView.numberOfRowsInSection(0)
         dispatch_after(time, dispatch_get_main_queue(), {
             if numberOfRows > 1 {
-                let indexPath = NSIndexPath(forRow: numberOfRows-1, inSection: (numberOfSections-1))
+                let indexPath = NSIndexPath(forRow: numberOfRows-1, inSection: 0)
                 self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
             }
         })
