@@ -105,7 +105,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         notificationCenter.addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: "menuControllerWillHide:", name: UIMenuControllerWillHideMenuNotification, object: nil) // #CopyMessage
 
-        // tableViewScrollToBottomAnimated(false) // doesn't work
+        tableViewScrollToBottomAnimated(false)
     }
 
     deinit {
@@ -278,10 +278,16 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 
     func tableViewScrollToBottomAnimated(animated: Bool) {
-        let numberOfRows = tableView.numberOfRowsInSection(0)
-        if numberOfRows > 0 {
-            tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: numberOfRows-1, inSection: 0), atScrollPosition: .Bottom, animated: animated)
-        }
+        let delay = 0.1 * Double(NSEC_PER_SEC)
+        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+        let numberOfSections = tableView.numberOfSections()
+        let numberOfRows = tableView.numberOfRowsInSection(numberOfSections-1)
+        dispatch_after(time, dispatch_get_main_queue(), {
+            if numberOfRows > 1 {
+                let indexPath = NSIndexPath(forRow: numberOfRows-1, inSection: (numberOfSections-1))
+                self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+            }
+        })
     }
 
     // Handle actions #CopyMessage
